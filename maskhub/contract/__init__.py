@@ -1,0 +1,1 @@
+"""Explicit data-source contracts."""

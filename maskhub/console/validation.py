@@ -15,6 +15,13 @@ def require_text(payload: Mapping[str, Any], key: str) -> str:
     return value.strip()
 
 
+def require_identifier(payload: Mapping[str, Any], key: str) -> str:
+    value = require_text(payload, key)
+    if any(fragment in value for fragment in ("/", "\\", "..", "\x00")):
+        raise InvalidRequest(f"{key} contains an invalid fragment")
+    return value
+
+
 def optional_text(payload: Mapping[str, Any], key: str, default: str = "") -> str:
     value = payload.get(key)
     if value is None:

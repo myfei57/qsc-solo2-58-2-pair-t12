@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from functools import partial
 
-from maskhub.console.handlers import audit, catalog, policy, rule, source, system
+from maskhub.console.handlers import audit, catalog, contract, policy, rule, source, system
 from maskhub.console.http import Request, Response
 from maskhub.console.router import Router
 
@@ -23,6 +23,15 @@ def build_router(runtime) -> Router:
     router.get("/datasets", bind(catalog.list_datasets, runtime))
     router.post("/datasets", bind(catalog.register_dataset, runtime))
     router.get("/dataset", bind(catalog.get_dataset, runtime))
+
+    router.post("/contracts", bind(contract.register_contract, runtime))
+    router.get("/contract", bind(contract.get_contract, runtime))
+    router.get("/contract/versions", bind(contract.contract_versions, runtime))
+    router.post("/contract/ingest", bind(contract.ingest_batch, runtime))
+    router.post("/contract/approve", bind(contract.approve_contract, runtime))
+    router.post("/contract/reject", bind(contract.reject_contract, runtime))
+    router.get("/contract/batches", bind(contract.list_batches, runtime))
+    router.get("/contract/batch", bind(contract.get_batch, runtime))
 
     router.get("/rules", bind(rule.list_rules, runtime))
     router.post("/rules", bind(rule.create_rule, runtime))
